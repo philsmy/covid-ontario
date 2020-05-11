@@ -1,0 +1,125 @@
+<% content_for :page_header do %>
+  <style>
+    #map {
+      height: 80%;
+      margin-top: 30px;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+<% end %>
+<div class='text-center'>For those in Ontario who are looking for more detailed info about the #COVID19 situation in your local area. Last updated <%= local_time_ago(PatientDatum.last.updated_at) %></div>
+<div id="map"></div>
+<div class='container mt-2'>
+  <%= column_chart @patients_chart_sum, title: 'Total Cases' %>
+  <%= column_chart @patients_chart, title: 'New Cases' %>
+  <hr/>
+  <div class='row'>
+    <div class='col-lg-4'>
+      <%= pie_chart @gender, title: 'By Gender' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= pie_chart @age_group, title: 'By Age' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= pie_chart @outcome, title: 'Outcome' %>
+    </div>
+  </div>
+  <hr/>
+  <div class='row mt-2'>
+    <div class='col-lg-4'>
+      <%= line_chart @retail_and_recreation_percent_change_from_baseline, title: 'Retail' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= line_chart @grocery_and_pharmacy_percent_change_from_baseline, title: 'Grocery/Pharmacy' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= line_chart @parks_percent_change_from_baseline, title: 'Parks' %>
+    </div>
+  </div>
+  <div class='row mt-2'>
+    <div class='col-lg-4'>
+      <%= line_chart @transit_stations_percent_change_from_baseline, title: 'Transit' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= line_chart @workplaces_percent_change_from_baseline, title: 'Workplace' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= line_chart @residential_percent_change_from_baseline, title: 'Residential' %>
+    </div>
+  </div>
+
+  <table class='table table-striped mt-2'>
+    <% if !@patients.blank? %>
+      <tr>
+        <th>District</th>
+        <th>First Case</th>
+        <th>Most Recent Case</th>
+        <th>Number of Cases</th>
+      </tr>
+      <% for patient_group in @patients.sort %>
+        <tr>
+          <td><%= link_to patient_group[0][0], "/ontario/#{patient_group[0][0]}"%></td>
+          <td><%= PatientDatum.order(:episode_date).find_by(reporter: patient_group[0][0]).episode_date%></td>
+          <td><%= PatientDatum.order(:episode_date).where(reporter: patient_group[0][0]).last.episode_date%></td>
+          <td><%= @patients[patient_group[0]] %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+<footer class="footer">
+  <div class="container text-center py-3 mt-4">
+    The source of this data is the <a href='https://www.ontario.ca/page/open-government-licence-ontario' target='_blank'>Ontario Goverment</a>. 
+    This is another website made by <a href='https://www.youtube.com/playlist?list=PLiJC12qFqVo095eFH0pLW_kt9CSX31ETj' target='_blank'>Phil Smy</a>. 
+     Last updated <%= local_time(PatientDatum.last.updated_at) %>
+  </div>
+</footer>
+<script>
+  var map;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 6,
+      center: new google.maps.LatLng(42.98641646, -82.40480836),
+      mapTypeId: 'terrain'
+    });
+  
+    // Create a <script> tag and set the USGS URL as the source.
+    var script = document.createElement('script');
+    // This example uses a local copy of the GeoJSON stored at
+    // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+    // script.src = 'conposcovidloc.geojson';
+    // script.src = 'mydata.geojson';
+    script.src = 'ontario_map_data.js';
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+  
+  // Loop through the results array and place a marker for each
+  // set of coordinates.
+  
+  window.eqfeed_callback = function(results) {
+    const infowindow = new google.maps.InfoWindow(); // Only one InfoWindow
+    for (var i = 0; i < results.features.length; i++) {
+      var coords = results.features[i].geometry.coordinates;
+      var latLng = new google.maps.LatLng(coords[1],coords[0]);
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        title: results.features[i].properties.reporter
+      });
+      marker.data = results.features[i];
+      marker.latLng = latLng;
+      marker.addListener('click', function(){
+          infowindow.close(); // Close previously opened infowindow
+          infowindow.setPosition(this.latLng);
+          infowindow.setContent(`<div id="infowindow"><strong>${this.data.properties.reporter}</strong><br/>${this.data.properties.num_cases} Cases<br/><a href='http://${this.data.properties.website}' target='_blank'>visit website</a></div>`);
+          infowindow.open(map);
+      });
+    }
+  }
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDX54Q1hI1y0om6AKAd3ZWcoE-9jHOfrMc&callback=initMap"></script>

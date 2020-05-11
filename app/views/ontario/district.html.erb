@@ -1,0 +1,26 @@
+<div class='container'>
+  <h2><%= @district %></h2>
+  <div class='container mt-2'>
+    <%= column_chart @patients_chart_sum, title: 'Total Cases' %>
+    <%= column_chart @patients_chart, title: 'New Cases' %>
+    <hr/>
+    <div class='row'>
+    <div class='col-lg-4'>
+      <%= pie_chart @gender, title: 'By Gender' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= pie_chart @age_group, title: 'By Age' %>
+    </div>
+    <div class='col-lg-4'>
+      <%= pie_chart @outcome, title: 'Outcome' %>
+    </div>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container text-center py-3 mt-4">
+    The source of this data is the <a href='https://www.ontario.ca/page/open-government-licence-ontario' target='_blank'>Ontario Goverment</a>. 
+    This is another website made by <a href='https://www.youtube.com/playlist?list=PLiJC12qFqVo095eFH0pLW_kt9CSX31ETj' target='_blank'>Phil Smy</a>. 
+     Last updated <%= local_time(PatientDatum.last.updated_at) %>
+  </div>
+</footer>

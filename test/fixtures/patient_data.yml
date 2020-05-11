@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  external_id: 1
+  episode_date: 2020-04-05
+  age_group: MyString
+  gender: MyString
+  acquisition_info: MyString
+  outcome: MyString
+  reporter: MyString
+  reporter_address: MyString
+  reporter_city: MyString
+  reporter_postal_code: MyString
+  reporter_website: MyString
+  reporter_latitude: 1.5
+  reporter_longitude: 1.5
+
+two:
+  external_id: 1
+  episode_date: 2020-04-05
+  age_group: MyString
+  gender: MyString
+  acquisition_info: MyString
+  outcome: MyString
+  reporter: MyString
+  reporter_address: MyString
+  reporter_city: MyString
+  reporter_postal_code: MyString
+  reporter_website: MyString
+  reporter_latitude: 1.5
+  reporter_longitude: 1.5
