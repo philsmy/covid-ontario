@@ -1,0 +1,29 @@
+<% content_for :page_header do %>
+<style>
+  #map {
+    height: 80%;
+    margin-top: 50px;
+  }
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<% end %>
+
+<div id="map"></div>
+<script type="text/javascript">  
+handler = Gmaps.build('Google');  
+handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){  
+    markers = handler.addMarkers(<%=raw @hash.to_json %>);  
+    handler.bounds.extendWith(markers);  
+    handler.fitMapToBounds();  
+});  
+
+heatmap = new google.maps.visualization.HeatmapLayer({
+          data: getPoints(),
+          map: handler
+        });
+</script>

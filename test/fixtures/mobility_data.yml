@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  country_region_code: MyString
+  country_region: MyString
+  sub_region_1: MyString
+  sub_region_2: MyString
+  date: 2020-04-24
+  retail_and_recreation_percent_change_from_baseline: 1
+  grocery_and_pharmacy_percent_change_from_baseline: 1
+  parks_percent_change_from_baseline: 1
+  transit_stations_percent_change_from_baseline: 1
+  workplaces_percent_change_from_baseline: 1
+  residential_percent_change_from_baseline: 1
+
+two:
+  country_region_code: MyString
+  country_region: MyString
+  sub_region_1: MyString
+  sub_region_2: MyString
+  date: 2020-04-24
+  retail_and_recreation_percent_change_from_baseline: 1
+  grocery_and_pharmacy_percent_change_from_baseline: 1
+  parks_percent_change_from_baseline: 1
+  transit_stations_percent_change_from_baseline: 1
+  workplaces_percent_change_from_baseline: 1
+  residential_percent_change_from_baseline: 1
