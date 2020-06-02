@@ -9,7 +9,7 @@
     "bootstrap": "4.3.1",
     "chart.js": "^2.9.3",
     "chartkick": "^3.2.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "local-time": "^2.1.0",
     "popper.js": "^1.16.1",
     "turbolinks": "^5.2.0",
